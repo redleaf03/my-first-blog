@@ -10,7 +10,19 @@ def post_list(request):                                             # Create you
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
-                                                                    # 매개변수 request(사용자가 요청하는 모든 것)
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
                                                                     # 'blog/post_list.html' 템플릿
                                                                     # {} - 이곳에 템플릿을 사용하기 위해 매개변수를 추가할 거에요.
                                                                     # (이 매개변수를'posts'라고 할거에요){'posts': posts}이렇게 작성할거에요.
