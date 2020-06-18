@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone                                   # timezone 모듈을 불러와야하니
 from .models import Post
 from django.shortcuts import render, get_object_or_404
+from .forms import PostForm
 
 def post_list(request):                                             # Create your views here.
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')      # posts 퀴리셋의 이름
